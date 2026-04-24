@@ -1,0 +1,316 @@
+/* ============================
+   Responsive CSS for Thinking Exam (Expanded)
+   Includes wallet/claim buttons, coin sound, fire/boost buttons,
+   qbtn aliases (.ans and .answered), leaderboard, invite, and utils
+   ============================ */
+
+:root{
+  --primary:#002a5c;
+  --card:#ffffff;
+  --btn-sky:#87CEEB;
+  --btn-green:#28a745;
+  --submit-red:#d63333;
+  --muted:#6c757d;
+  --glass: rgba(255,255,255,0.7);
+  --shadow: 0 6px 18px rgba(0,0,0,0.08);
+  --radius-lg: 12px;
+}
+
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;font-family:Arial,Helvetica,sans-serif; background:#071c29;
+background-position: center;
+align-content: top;
+-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden}
+
+/* MAIN LAYOUT */
+#container{
+  width:100%;
+  max-width:980px;
+  margin:0 auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+
+/* CARD */
+.card{
+  width:100%;
+  background:var(--card);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  box-shadow:var(--shadow);
+  min-height:200px;
+}
+
+/* HEADLINES */
+h1,h2,h3{color:var(--primary);text-align:center;margin:8px 0}
+
+/* QUESTION GRID */
+.question-grid{
+  position:relative; /* keep relative for internal absolute children */
+  margin-top:80px;   /* replaced top:2pc */
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  width:100%;
+  overflow:auto;
+}
+
+/* NUMBER ROW */
+.row{display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+
+/* QBTN: include both .ans and .answered aliases */
+.qbtn, .qbtn.ans, .qbtn.answered{
+  width:26px;height:26px;border-radius:6px;border:none;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--btn-sky);color:var(--primary);font-weight:700;font-size:12px;
+  cursor:pointer;transition:transform .08s ease, background .18s ease, box-shadow .12s ease;
+  box-shadow:0 4px 10px rgba(0,0,0,0.06);
+}
+.qbtn:active{transform:scale(.96)}
+.qbtn.answered, .qbtn.ans{background:var(--btn-green);color:#fff}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:8px}
+.option{
+  display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;
+  border:1px solid #e6e6e6;background:#fff;cursor:pointer;transition:background .12s ease, transform .08s;
+}
+.option:hover{background:#fafafa}
+.option input{accent-color:var(--primary)}
+
+/* CONTROLS (prev/next/submit) */
+.controls-fixed{
+  width:100%;
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;padding:8px 0;
+  position:relative;
+}
+.ctrl-btn{
+  padding:10px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
+  box-shadow:0 6px 12px rgba(0,0,0,0.08);transition:transform .12s,opacity .12s;
+}
+.ctrl-btn:active{transform:scale(.97)}
+#prevBtn{background:var(--muted);color:#fff}
+#nextBtn{background:var(--primary);color:#fff}
+#submitBtn{background:var(--submit-red);color:#fff;padding:12px 20px}
+
+/* CLAIM / WALLET / COIN BUTTONS */
+.claim-btn, .contact-wallet, .coin-btn {
+  display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;
+  border:none;cursor:pointer;font-weight:700;box-shadow:var(--shadow);
+}
+.claim-btn{background:linear-gradient(180deg,var(--btn-green),#2ea44f);color:#fff}
+.contact-wallet{background:#fff;border:1px solid #e6e6e6;color:var(--primary)}
+.coin-btn{background:linear-gradient(180deg,var(--btn-sky),#74c0ff);color:#002a5c}
+
+/* WALLET LIST (dropdown modal style) */
+.wallet-list{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1200;
+  min-width:260px;background:var(--card);padding:16px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.18)
+}
+.wallet-list .wallet{
+  display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;border:1px solid #f0f0f0;margin-bottom:8px
+}
+
+/* FIRE BUTTON / MULTI-TOUCH UI */
+.fire-area{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.fire-btn{
+  width:96px;height:96px;border-radius:999px;border:none;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#ffcf6b,#ffb84d);font-weight:900;font-size:18px;cursor:pointer;box-shadow:0 14px 34px rgba(0,0,0,.14);
+  transition:transform .12s ease, box-shadow .12s;
+}
+.fire-btn:active{transform:scale(.96)}
+.fire-btn.small{width:72px;height:72px}
+.fire-splash{position:absolute;pointer-events:none;border-radius:50%;opacity:.18}
+
+/* SPAWNED ELEMENT (for animation) */
+.spawn {
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:28px;height:28px;border-radius:6px;background:var(--btn-sky);display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#002a5c;pointer-events:none;opacity:0;transition:transform .6s cubic-bezier(.22,.9,.21,1),opacity .6s;
+}
+
+/* BOOST BUTTON */
+.boost-btn{padding:8px 12px;border-radius:8px;background:#ffd6a5;border:none;font-weight:800;cursor:pointer}
+
+/* LEADERBOARD */
+.leaderboard{width:100%;max-height:360px;overflow:auto;border-radius:10px;padding:8px;border:1px solid #f0f0f0;background:linear-gradient(180deg,#fff,#fafafa)}
+.leaderboard .row-l{display:flex;justify-content:space-between;padding:8px;border-bottom:1px dashed #eee}
+
+/* INVITE/REFERRAL */
+.invite {
+  display:flex;gap:8px;align-items:center;justify-content:center;
+  width:100%;padding:8px;border-radius:8px;background:linear-gradient(180deg,#f8fcff,#eef8ff);
+}
+.invite .link{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%;font-weight:600}
+
+/* PROGRESS / LEVEL BAR */
+.level-bar{height:18px;background:#eee;border-radius:999px;overflow:hidden}
+.level-bar .fill{height:100%;width:40%;background:linear-gradient(90deg,#ffd86b,#ff9a9e);transition:width .4s}
+
+/* UTILS */
+.flex-row{display:flex;align-items:center;gap:8px}
+.center{text-align:center}
+.small{font-size:13px;color:#666}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#f1f1f1;font-weight:700}
+
+/* IMAGES */
+img{max-width:100%;height:auto;border-radius:8px}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 1024px){
+  .card{padding:16px}
+  .fire-btn{width:84px;height:84px}
+  .qbtn{width:30px;height:30px}
+}
+
+@media (max-width: 768px){
+  #container{padding:12px}
+  .card{padding:14px}
+  .ctrl-btn{padding:10px 12px;font-size:14px}
+  .fire-btn{width:72px;height:72px}
+  .spawn{width:22px;height:22px;font-size:11px}
+  .leaderboard{max-height:280px}
+}
+
+@media (max-width:480px){
+  .ctrl-btn{padding:8px 10px;font-size:13px}
+  .qbtn{width:26px;height:26px;font-size:11px}
+  h1{font-size:20px}
+  .fire-btn{width:64px;height:64px}
+  .wallet-list{min-width:220px;padding:12px}
+}
+
+/* VISUALLY-HIDDEN (accessibility) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* FALLBACKS / LEGACY BROWSERS */
+@supports not (display: flex){
+  .row{display:block}
+  .options{display:block}
+}
+
+/* SMALL HELPERS FOR JS */
+.hidden{display:none!important;opacity:0!important}
+.fade-in{animation:fadeIn .28s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ADDITIONAL: make sure major interactive elements are touch-friendly */
+button, .ctrl-btn, .claim-btn, .contact-wallet, .coin-btn, .fire-btn{touch-action:manipulation}
+
+/* NOTES:
+ - If your HTML uses `.qbtn.ans` or `.qbtn.answered`, both are styled.
+ - If you have custom sound/coin elements, use .coin-btn and add JS to play audio.
+ - Wallet modal uses .wallet-list (fixed centered). Close with JS toggling .hidden.
+ - Spawned animated elements should be created with class "spawn" and animated via JS (add/remove inline transform/opacity).
+*/#header { 
+color: #ff5415; 
+background: #002a5c; 
+text-align: center; 
+vertical-align: bottom; 
+align-content: center; 
+justify-content: center;
+height: 6pc;
+}
+
+ hr {border: #ff5415; 
+ background: #ff7300;
+  height:3px;}
+  #userEmailDisplay,#userNameDisplay,.timer{
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 0.9pc;
+  }
+  .disclaimer-card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+button.accept-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  
+}
+.timer {
+  font-weight: 700;
+  position: absolute;
+  right: 1pc;
+}
+/* ---------------- CALCULATOR ---------------- */
+.calc-btn {
+    position: fixed;
+    top: 55px;
+    
+    right: 10px;
+    background:  #ff5e00;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    z-index: 9999;
+    font-size: 14px;
+}
+
+.calculator {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background:#071c29 ;
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 350px;
+    z-index: 9999;
+     border:4px solid #ff5e00;
+}
+
+.hidden { display: none; }
+
+.calc-display input {
+    width: 90%;
+    padding: 15px;
+    font-size: 20px;
+    text-align: right;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    color: #fff;
+    border:2px solid #ff5e00;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.calc-buttons .btn {
+    padding: 15px;
+    font-size: 18px;
+    border:2px solid  #ff5e00;
+    background: #e5e5e5;
+    border-radius: 10px;
+}
+
+
+.calc-buttons .op {
+    background: #002a5c;
+    color: white;
+}
+
+.calc-buttons .equal {
+    background: green;
+    color: white;
+}

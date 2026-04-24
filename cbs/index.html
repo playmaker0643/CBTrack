@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logic & Critical Thinking CBT — 50 Questions</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#002a5c">
+</head>
+<body>
+    <div id="body">
+<div class="app-shell">
+    <div id="header">
+      
+    <h1 id="health" style="color:#ff5415; font-size:2.5pc">CodeNest Academy</h1>
+      <h1>.</h1>
+    <hr>
+</div>
+   <!-- CALCULATOR BUTTON (TOP RIGHT) -->
+<button id="calcToggleBtn" class="calc-btn">on/off Calculator</button>
+
+<!-- CALCULATOR POPUP -->
+<div id="calculator" class="calculator hidden">
+    <div class="calc-display">
+        <input type="text" id="calcScreen" disabled>
+    </div>
+
+    <div class="calc-buttons">
+        <button class="btn" onclick="pressCalc('7')">7</button>
+        <button class="btn" onclick="pressCalc('8')">8</button>
+        <button class="btn" onclick="pressCalc('9')">9</button>
+        <button class="btn" style="background:red" onclick="clearCalc()">C</button>
+        <button class="btn" onclick="pressCalc('4')">4</button>
+        <button class="btn" onclick="pressCalc('5')">5</button>
+        <button class="btn" onclick="pressCalc('6')">6</button>
+        <button class="btn op" onclick="pressCalc('*')">×</button>
+
+        <button class="btn" onclick="pressCalc('1')">1</button>
+        <button class="btn" onclick="pressCalc('2')">2</button>
+        <button class="btn" onclick="pressCalc('3')">3</button>
+        <button class="btn op" onclick="pressCalc('-')">−</button>
+
+        <button class="btn" onclick="pressCalc('0')">0</button>
+        <button class="btn equal" onclick="calculateResult()">=</button>
+        <button class="btn op" onclick="pressCalc('+')">+</button>
+        <button class="btn op" onclick="pressCalc('/')">÷</button>
+        
+    </div>
+</div>
+<div id="container">
+
+<!-- USER ENTRY -->
+
+
+<div id="userEntry" class="card">
+    <h3>Enter Your Details</h3>
+    <input id="fullName" placeholder="Full Name" style="padding:8px;margin:6px 0;width:100%;" />
+    <input id="email" placeholder="Email" type="email" style="padding:8px;margin:6px 0;width:100%;" />
+    <input id="phone" placeholder="Phone Number" type="tel" style="padding:8px;margin:6px 0;width:100%;" />
+    <button id="startBtn" style="padding:10px 14px;background:var(--primary);color:#fff;border-radius:8px;border:none;cursor:pointer">Next</button>
+</div>
+
+<!-- DISCLAIMER -->
+<div id="disclaimerPage" class="disclaimer-card" style="display:none">
+    <nav style="text-align:left; align-content:left;font-size:1pc;"><p><b>Provider:</b>Abdulsalam Nasir<br>
+    <b>Sponsor:</b>Abdulhafiz Nasir</p></nav>
+    <h3 style="color: green">Introduction</h3>
+     <nav style="text-align:left; align-content:left;font-size:1pc;">
+    <p><b>📝Total questions: </b>50/50<br><b>✅Mark: </b>2 per question<br><b>⏱️Time limit: </b>30 minutes<br><b>🔒Security: </b>switching of tap, minimize of browser and reload page are not allowed</p>
+    </nav>
+    <h3 style="color:red">Disclaimer</h3>
+     <nav style="text-align:left; align-content:left;font-size:1pc;">    <p>Please read and accept before starting the exam.</p>
+    <p>By accepting, you agree NOT to refresh, minimize, switch apps or close the browser.<br><br>please avoid cheating in exam use your own understanding to answer the questions.<br><br>refreshing, change of tap and minimize it makes your exam to automatically submitted<br><br><b>Note:</b>each user can only attempt the exam once and when submited you can't attend it again</p></nav>
+    <button class="accept-btn" id="acceptBtn">I Accept</button>
+</div>
+
+<!-- EXAM AREA -->
+
+<div id="examArea" style="display:none">
+    <div id="separate">
+    <div class="header-row">
+        <div id="userNameDisplay" class="info-small"></div>
+        <div id="userEmailDisplay" class="info-small"></div></div>
+        
+        <div class="timer info-small">Time Left: <span id="timer">30:00</span></div>
+    </div>
+<br>
+    <div id="questionCard" class="card"></div>
+
+    <div class="controls-fixed">
+        <button id="prevBtn" class="ctrl-btn">Previous</button>
+        <button id="submitBtn" class="ctrl-btn">Submit</button>
+        <button id="nextBtn" class="ctrl-btn">Next</button>
+    </div>
+
+    <div class="question-grid" id="questionGrid" aria-label="Question navigation grid"></div>
+</div>
+<p style="color: white; position: absolute; top:47.5pc;">
+ &copy; 2025 CodeNest Academy. All rights reserved.</p>
+</div>
+<div id="cheatWarning" style="color:red; font-weight:bold; margin-bottom:10px;">
+  Remaining Attempts: 3
+</div>
+</div>
+<script src="script.js"></script>
+
+<script>
+/* Register service worker */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').then(reg => {
+    // Send file list to service worker
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({type:'SET_FILES', files:[]});
+    }
+  }).catch(err => console.log('SW register failed', err));
+}
+
+/* Utility: show offline error next button behavior */
+function showError(msg) {
+  let el = document.getElementById('offline-error-msg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'offline-error-msg';
+    el.style.position = 'fixed';
+    el.style.left = '10px';
+    el.style.right = '10px';
+    el.style.bottom = '20px';
+    el.style.padding = '12px';
+    el.style.borderRadius = '8px';
+    el.style.background = '#ffe6e6';
+    el.style.color = '#b30000';
+    el.style.fontWeight = '700';
+    el.style.textAlign = 'center';
+    el.style.zIndex = '9999';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(()=>{ el.style.display='none'; }, 4000);
+}
+
+/* Hook up all buttons with data-next attribute to check online status */
+document.addEventListener('click', function(e){
+  let btn = e.target.closest('[data-next]');
+  if (!btn) return;
+  if (!navigator.onLine) {
+    e.preventDefault();
+    showError('Connect your internet');
+    return false;
+  }
+});
+
+window.addEventListener('online', ()=>{ console.log('online'); });
+window.addEventListener('offline', ()=>{ console.log('offline'); });
+
+/* Randomize question order on each visit:
+   - Expects question elements with class "question" and data-qid attributes.
+   - Will shuffle their order in the DOM so each visit is random.
+*/
+function shuffleQuestions() {
+  try {
+    const container = document.querySelector('#questions-container') || document.querySelector('form') || document.body;
+    const qs = Array.from(container.querySelectorAll('.question'));
+    if (qs.length <= 1) return;
+    // Use session storage to store order for this session; but we want new random on fresh visit
+    const key = 'thinking_exam_qorder';
+    if (!sessionStorage.getItem(key)) {
+      // shuffle
+      for (let i = qs.length -1; i>0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [qs[i], qs[j]] = [qs[j], qs[i]];
+      }
+      qs.forEach(q=>container.appendChild(q)); // re-append in shuffled order
+      sessionStorage.setItem(key, '1');
+    }
+  } catch(e){ console.log('shuffle error', e); }
+}
+document.addEventListener('DOMContentLoaded', shuffleQuestions);
+</script>
+
+
+</div>
+</body>
+</html>
